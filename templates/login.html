@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="glass-card">
+            <h2 class="text-center mb-4">Login to SCCS</h2>
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="mb-3">
+                    <label class="form-label">Institution ID</label>
+                    <input type="text" name="institution_id" class="form-control glass-input" required placeholder="Ex: A1B2C3">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control glass-input" required placeholder="Enter Username">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control glass-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <div class="mt-3 text-center">
+                <small>Don't have an account? <br> <a href="{{ url_for('register_student') }}" class="text-info">Register as Student</a> | <a href="{{ url_for('register_staff') }}" class="text-warning">Register as Staff</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row align-items-center mt-5">
+    <div class="col-md-6 text-center text-md-start">
+        <h1 class="display-4 fw-bold mb-3">Welcome to SCCS</h1>
+        <p class="lead mb-4">Empowering students to ask questions without hesitation. The Silent Classroom Communication System ensures every doubt is heard securely and anonymously.</p>
+        
+        <div class="d-grid gap-3 d-md-flex justify-content-md-start">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 me-md-2">Login to Portal</a>
+            <a href="{{ url_for('register_institution') }}" class="btn btn-outline-light btn-lg px-4">Register Institution</a>
+        </div>
+    </div>
+    <div class="col-md-6 mt-5 mt-md-0">
+        <div class="glass-card text-center p-5">
+            <h3 class="mb-4">New to SCCS?</h3>
+            <div class="d-grid gap-3">
+                <a href="{{ url_for('register_student') }}" class="btn btn-info text-white">Register as Student</a>
+                <a href="{{ url_for('register_staff') }}" class="btn btn-warning text-dark">Register as Staff</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

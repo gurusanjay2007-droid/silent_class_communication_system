@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7">
+        <div class="glass-card">
+            <h2 class="text-center mb-4 text-warning">Staff Registration</h2>
+            <form method="POST" action="{{ url_for('register_staff') }}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Institution ID <span class="text-danger">*</span></label>
+                        <input type="text" name="institution_id" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Username <span class="text-danger">*</span></label>
+                        <input type="text" name="username" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                        <input type="password" name="password" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Highest Degree Completed</label>
+                        <input type="text" name="degree" class="form-control glass-input" placeholder="Ph.D, M.Sc, etc.">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Primary Subject Handled</label>
+                        <input type="text" name="subject" class="form-control glass-input">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning text-dark w-100 mt-3">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="glass-card">
+            <h2 class="text-center mb-4 text-info">Student Registration</h2>
+            <form method="POST" action="{{ url_for('register_student') }}">
+                <div class="row row-selection">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Institution ID <span class="text-danger">*</span></label>
+                        <input type="text" name="institution_id" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Username <span class="text-danger">*</span></label>
+                        <input type="text" name="username" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                        <input type="password" name="password" class="form-control glass-input" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Registration No.</label>
+                        <input type="text" name="reg_no" class="form-control glass-input">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" name="dob" class="form-control glass-input">
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Department</label>
+                        <select name="department" class="form-control glass-input">
+                            <option value="CS">Computer Science</option>
+                            <option value="IT">Information Tech</option>
+                            <option value="AI_DS">AI & Data Science</option>
+                            <option value="ECE">ECE</option>
+                            <option value="EEE">EEE</option>
+                            <option value="MECH">Mechanical</option>
+                            <option value="CIVIL">Civil Engineering</option>
+                            <option value="AERO">Aerospace</option>
+                            <option value="BIOTECH">Biotechnology</option>
+                            <option value="ROBOTICS">Robotics</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Year of Study</label>
+                        <select name="year_of_study" class="form-control glass-input">
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Class / Section</label>
+                        <select name="student_class" class="form-control glass-input">
+                            <option value="A">Section A</option>
+                            <option value="B">Section B</option>
+                            <option value="C">Section C</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info text-white w-100 mt-3">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

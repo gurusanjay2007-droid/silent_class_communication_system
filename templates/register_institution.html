@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="glass-card">
+            <h2 class="text-center mb-4">Register Institution</h2>
+            <form method="POST" action="{{ url_for('register_institution') }}">
+                <div class="mb-3">
+                    <label class="form-label">Institution Name</label>
+                    <input type="text" name="name" class="form-control glass-input" required placeholder="University / School Name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Admin Password</label>
+                    <input type="password" name="password" class="form-control glass-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Generate Institution ID</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

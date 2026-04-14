@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h2 class="mb-4">Student Dashboard</h2>
+        <div class="glass-card mb-4">
+            <h4 class="mb-3">Active Class Sessions (Periods)</h4>
+            
+            {% if active_periods %}
+                <div class="row">
+                    {% for period in active_periods %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-transparent border-info text-white h-100 p-3">
+                            <h5>Subject: {{ period.subject }}</h5>
+                            <p class="mb-1">Teacher ID: {{ period.staff_id }}</p>
+                            <p class="mb-2"><span class="badge bg-success">Active Session</span></p>
+                            
+                            <form method="POST" action="{{ url_for('ask_doubt') }}">
+                                <input type="hidden" name="period_id" value="{{ period.id }}">
+                                <div class="mb-2">
+                                    <textarea name="content" class="form-control glass-input" rows="3" placeholder="Enter your doubt anonymously. Only your teacher will see this." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-info text-dark fw-bold btn-sm w-100">Post Doubt Anonymously</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No active sessions for your class at the moment. Please wait for your instructor to start a session.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

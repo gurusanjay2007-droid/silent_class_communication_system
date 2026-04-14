@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+        <div class="glass-card mb-4">
+            <h4 class="mb-3">Start a New Module Session</h4>
+            {% if active_period %}
+                <div class="alert alert-warning text-dark">
+                    <strong>Warning:</strong> You currently have an active session for {{ active_period.subject }}. 
+                    End it before starting a new one.
+                </div>
+                <form method="POST" action="{{ url_for('end_period', period_id=active_period.id) }}">
+                    <button type="submit" class="btn btn-danger w-100">End Current Session</button>
+                </form>
+            {% else %}
+                <form method="POST" action="{{ url_for('staff_dashboard') }}">
+                    <div class="mb-2">
+                        <label>Subject</label>
+                        <input type="text" name="subject" class="form-control glass-input" required>
+                    </div>
+                    <div class="mb-2">
+                        <label>Department</label>
+                        <select name="department" class="form-control glass-input">
+                            <option value="CS">Computer Science</option>
+                            <option value="IT">Information Tech</option>
+                            <option value="AI_DS">AI & Data Science</option>
+                            <option value="ECE">ECE</option>
+                            <option value="EEE">EEE</option>
+                            <option value="MECH">Mechanical</option>
+                            <option value="CIVIL">Civil Engineering</option>
+                            <option value="AERO">Aerospace</option>
+                            <option value="BIOTECH">Biotechnology</option>
+                            <option value="ROBOTICS">Robotics</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label>Year of Study</label>
+                        <select name="year" class="form-control glass-input">
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Class / Section</label>
+                        <select name="student_class" class="form-control glass-input">
+                            <option value="A">Section A</option>
+                            <option value="B">Section B</option>
+                            <option value="C">Section C</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-warning text-dark w-100">Start Session</button>
+                </form>
+            {% endif %}
+        </div>
+        
+        <div class="glass-card">
+            <h5>Past Sessions</h5>
+            <div style="max-height: 200px; overflow-y:auto;" class="pe-2">
+                {% for p in periods %}
+                    {% if not p.is_active %}
+                        <div class="border-bottom border-secondary mb-2 pb-2 text-white-50 small">
+                            {{ p.subject }} ({{ p.department }} - {{ p.student_class }})<br>
+                            Started: {{ p.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="glass-card h-100">
+            <h4 class="mb-3 d-flex justify-content-between align-items-center">
+                Private Doubt Feed
+                {% if active_period %}
+                    <span class="badge bg-success">Active: {{ active_period.subject }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">No Session Active</span>
+                {% endif %}
+            </h4>
+            
+            {% if active_period %}
+                {% if doubts %}
+                    {% for d in doubts %}
+                        <div class="doubt-bubble">
+                            <p class="mb-2 fs-5 fw-light">{{ d.content }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    {% if d.status == 'pending' %}
+                                        <span class="status-badge bg-warning text-dark">Pending</span>
+                                    {% elif d.status == 'cleared' %}
+                                        <span class="status-badge bg-success">Cleared</span>
+                                    {% else %}
+                                        <span class="status-badge bg-danger">Removed</span>
+                                        <small class="ms-2">Reason: {{ d.removed_reason }}</small>
+                                    {% endif %}
+                                    <small class="ms-3 text-white-50">{{ d.timestamp.strftime('%H:%M') }}</small>
+                                </div>
+                                
+                                {% if d.status == 'pending' %}
+                                <div class="d-flex gap-2">
+                                    <form method="POST" action="{{ url_for('resolve_doubt', doubt_id=d.id) }}">
+                                        <input type="hidden" name="action" value="cleared">
+                                        <button type="submit" class="btn btn-sm btn-success">Mark Cleared</button>
+                                    </form>
+                                    
+                                    <!-- Remove Dropdown / Modal would be better, substituting with simple form for now -->
+                                    <form method="POST" action="{{ url_for('resolve_doubt', doubt_id=d.id) }}" class="d-flex gap-1" onsubmit="return promptReason(this);">
+                                        <input type="hidden" name="action" value="removed">
+                                        <input type="hidden" name="reason" class="reason-input">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                    </form>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-white-50 mt-5 text-center">No doubts asked in this session yet.</p>
+                {% endif %}
+            {% else %}
+                <div class="text-center mt-5">
+                    <p class="text-white-50 mb-0">Start a session to receive doubts.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function promptReason(form) {
+    const reason = prompt("Please provide a reason for removal:");
+    if (reason) {
+        form.querySelector('.reason-input').value = reason;
+        return true;
+    }
+    return false; // Cancel form submission
+}
+</script>
+{% endblock %}
