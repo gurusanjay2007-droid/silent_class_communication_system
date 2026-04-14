@@ -3,34 +3,93 @@
 {% block content %}
 <div class="row mt-4">
     <div class="col-12">
-        <h2 class="mb-4">Student Dashboard</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Student Dashboard</h2>
+            <button class="btn btn-sync btn-sm" id="syncBtn" onclick="syncClass()">
+                <span id="syncIcon">🔄</span> Sync with Live Class
+            </button>
+        </div>
+
         <div class="glass-card mb-4">
-            <h4 class="mb-3">Active Class Sessions (Periods)</h4>
+            <div class="d-flex align-items-center mb-3">
+                <h4 class="mb-0">Active Class Sessions</h4>
+                {% if active_periods %}
+                    <span class="ms-3 badge bg-success d-flex align-items-center">
+                        <span class="pulse-live"></span> Live Now
+                    </span>
+                {% endif %}
+            </div>
             
             {% if active_periods %}
                 <div class="row">
                     {% for period in active_periods %}
                     <div class="col-md-6 mb-3">
-                        <div class="card bg-transparent border-info text-white h-100 p-3">
-                            <h5>Subject: {{ period.subject }}</h5>
-                            <p class="mb-1">Teacher ID: {{ period.staff_id }}</p>
-                            <p class="mb-2"><span class="badge bg-success">Active Session</span></p>
-                            
-                            <form method="POST" action="{{ url_for('ask_doubt') }}">
-                                <input type="hidden" name="period_id" value="{{ period.id }}">
-                                <div class="mb-2">
-                                    <textarea name="content" class="form-control glass-input" rows="3" placeholder="Enter your doubt anonymously. Only your teacher will see this." required></textarea>
+                        <div class="card bg-transparent border-info text-white h-100 p-3 shadow-lg">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h5 class="mb-0">Subject: {{ period.subject }}</h5>
+                                    <small class="text-white-50">Teacher ID: {{ period.staff_id }}</small>
                                 </div>
-                                <button type="submit" class="btn btn-info text-dark fw-bold btn-sm w-100">Post Doubt Anonymously</button>
-                            </form>
+                                <span class="badge bg-info text-dark">IN SESSION</span>
+                            </div>
+                            
+                            <hr class="border-secondary">
+                            
+                            <div id="joinArea-{{ period.id }}">
+                                <button class="btn btn-outline-info w-100 mb-3" onclick="toggleDoubtForm('{{ period.id }}')">Join Class / Ask Doubt</button>
+                                
+                                <form method="POST" action="{{ url_for('ask_doubt') }}" class="doubt-form d-none" id="form-{{ period.id }}">
+                                    <input type="hidden" name="period_id" value="{{ period.id }}">
+                                    <div class="mb-2">
+                                        <textarea name="content" class="form-control glass-input" rows="3" placeholder="Enter your doubt anonymously..." required></textarea>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-info text-dark fw-bold btn-sm flex-grow-1">Post Doubt</button>
+                                        <button type="button" class="btn btn-outline-light btn-sm" onclick="toggleDoubtForm('{{ period.id }}')">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-muted">No active sessions for your class at the moment. Please wait for your instructor to start a session.</p>
+                <p class="text-muted text-center py-5">
+                    No active sessions for your class at the moment.<br>
+                    <small>Click "Sync with Live Class" to check again.</small>
+                </p>
             {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+function syncClass() {
+    const btn = document.getElementById('syncBtn');
+    const icon = document.getElementById('syncIcon');
+    
+    // Add spinning animation
+    icon.classList.add('sync-spinning');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="sync-spinning d-inline-block">🔄</span> Syncing...';
+    
+    // Simulate sync delay and reload
+    setTimeout(() => {
+        window.location.reload();
+    }, 800);
+}
+
+function toggleDoubtForm(periodId) {
+    const form = document.getElementById('form-' + periodId);
+    const joinBtn = document.querySelector(`#joinArea-${periodId} > button`);
+    
+    if (form.classList.contains('d-none')) {
+        form.classList.remove('d-none');
+        joinBtn.classList.add('d-none');
+    } else {
+        form.classList.add('d-none');
+        joinBtn.classList.remove('d-none');
+    }
+}
+</script>
 {% endblock %}
